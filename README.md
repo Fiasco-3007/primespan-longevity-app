@@ -2,7 +2,7 @@
 
 A single-page website for a personalised longevity performance app, built for the persona **Natasha Lim**, a 38-year-old Senior Marketing Manager in Singapore who uses an Oura Ring and wants data-driven, personalised health guidance.
 
-**Live site:** https://YOUR-USERNAME.github.io/primespan-longevity-app/
+**Live site:** (https://fiasco-3007.github.io/primespan-longevity-app/)
 
 ## Persona motives
 - Longevity optimisation
