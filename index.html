@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Primespan | Personalised Longevity App for Oura Ring Users</title>
+<meta name="description" content="Primespan turns your Oura Ring data into a daily plan for sleep, nutrition and training, built around your body, not population averages.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --mist:#EAF1EE; --paper:#FFFFFF; --ink:#10261F; --moss:#2F6B4F; --soft:#5B6F67;
+  --line:#CCDAD4; --amber:#E8962E; --amber-bg:#FCEFD9;
+  --serif:'Newsreader',Georgia,'Times New Roman',serif;
+  --sans:'Manrope',system-ui,-apple-system,'Segoe UI',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--mist);color:var(--ink);line-height:1.6;font-size:17px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.1;letter-spacing:-.01em}
+h1{font-size:clamp(2.6rem,6vw,4.4rem)}
+h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:16px}
+h3{font-size:1.35rem;margin-bottom:8px}
+p{max-width:62ch}
+.btn{display:inline-block;background:var(--ink);color:#fff;text-decoration:none;font-weight:700;padding:15px 28px;border-radius:999px;transition:background .2s}
+.btn:hover{background:var(--moss)}
+.btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--ink)}
+.btn.ghost:hover{background:var(--ink);color:#fff}
+
+/* nav */
+nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+.logo{font-family:var(--serif);font-size:1.6rem;font-weight:600;text-decoration:none}
+nav ul{display:flex;gap:28px;list-style:none;font-size:.95rem;font-weight:500}
+nav a{text-decoration:none}
+nav a:hover{text-decoration:underline}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:56px;align-items:center;padding:48px 0 88px}
+.hero p.lead{font-size:1.2rem;color:var(--soft);margin:24px 0 32px}
+.hero .actions{display:flex;gap:14px;flex-wrap:wrap}
+.hero small{display:block;margin-top:18px;color:var(--soft);font-size:.9rem}
+
+/* the morning plan card: the one memorable element */
+.plan{background:var(--paper);border-radius:22px;padding:28px;box-shadow:0 24px 60px -28px rgba(16,38,31,.45)}
+.plan header{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:18px}
+.plan header strong{font-family:var(--serif);font-size:1.25rem}
+.plan header span{font-size:.85rem;color:var(--soft)}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.metric b{display:block;font-family:var(--serif);font-size:2rem;line-height:1}
+.metric span{font-size:.8rem;color:var(--soft)}
+.bar{height:6px;background:var(--mist);border-radius:6px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--moss);border-radius:6px;width:0;animation:fill 1.4s .3s cubic-bezier(.2,.7,.2,1) forwards}
+.bar i.a{background:var(--amber)}
+@keyframes fill{to{width:var(--w)}}
+.plan ul{list-style:none;display:grid;gap:12px}
+.plan li{border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:.95rem}
+.plan li strong{display:block}
+.plan li span{color:var(--soft);font-size:.85rem}
+.plan li.flag{background:var(--amber-bg);border-color:#F2D3A0}
+
+/* sections */
+section{padding:88px 0}
+section.white{background:var(--paper)}
+.intro{margin-bottom:44px}
+.intro p{color:var(--soft);font-size:1.1rem}
+
+/* compare */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.col{border-radius:20px;padding:32px}
+.col.generic{border:2px dashed var(--line);color:var(--soft)}
+.col.mine{background:var(--ink);color:#fff}
+.col ul{list-style:none;display:grid;gap:12px;margin-top:16px}
+.col li{padding-left:26px;position:relative}
+.col li::before{content:"";position:absolute;left:0;top:.65em;width:12px;height:2px;background:currentColor}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;counter-reset:s}
+.step{counter-increment:s;border-top:3px solid var(--ink);padding-top:20px}
+.step::before{content:"Step " counter(s);display:block;font-weight:700;color:var(--moss);margin-bottom:8px;font-size:.95rem}
+.step p{color:var(--soft)}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:28px 56px}
+.pillar{border-left:3px solid var(--moss);padding-left:20px}
+.pillar p{color:var(--soft)}
+
+/* quotes */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+blockquote{background:var(--paper);border-radius:18px;padding:26px;font-family:var(--serif);font-size:1.15rem;line-height:1.45}
+blockquote cite{display:block;margin-top:14px;font-family:var(--sans);font-style:normal;font-size:.85rem;color:var(--soft)}
+.note{margin-top:14px;font-size:.85rem;color:var(--soft)}
+
+/* pricing */
+.price{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;background:var(--ink);color:#fff;border-radius:28px;padding:56px}
+.price .amt{font-family:var(--serif);font-size:4rem;line-height:1}
+.price .amt small{font-size:1.1rem;font-family:var(--sans);opacity:.75}
+.price ul{list-style:none;display:grid;gap:12px}
+.price li::before{content:"\2713";color:var(--amber);font-weight:700;margin-right:12px}
+.price .btn{background:var(--amber);color:var(--ink);margin-top:24px}
+.price .btn:hover{background:#fff}
+
+footer{padding:44px 0;font-size:.85rem;color:var(--soft)}
+footer p{max-width:80ch}
+
+/* game layer */
+.ringrow{display:flex;align-items:center;gap:20px;margin-bottom:14px}
+.ring{position:relative;width:112px;height:112px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:10;stroke-linecap:round}
+.trk{stroke:var(--mist)}
+.arc{stroke:var(--moss);stroke-dasharray:327;transition:stroke-dashoffset .6s ease}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--serif);font-size:2.2rem}
+.lvl{flex:1;font-size:.9rem}
+.lvl span{font-weight:700;display:block}
+.lvl small{color:var(--soft)}
+.bar i.live{animation:none;transition:width .4s ease}
+.hint{font-size:.85rem;color:var(--soft);margin-bottom:12px}
+.tasks{display:grid;gap:10px}
+.task{display:flex;align-items:center;gap:14px;text-align:left;width:100%;font:inherit;color:inherit;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer;transition:background .2s,border-color .2s}
+.task:hover{border-color:var(--moss)}
+.task strong{display:block;font-size:.95rem}
+.task small{color:var(--soft);font-size:.82rem;display:block}
+.task em{margin-left:auto;font-style:normal;font-weight:700;font-size:.8rem;color:var(--moss);white-space:nowrap}
+.chk{flex:none;width:24px;height:24px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;transition:.2s}
+.task[aria-pressed=true]{background:#E3F1EA;border-color:var(--moss)}
+.task[aria-pressed=true] .chk{background:var(--moss);border-color:var(--moss)}
+.task[aria-pressed=true] .chk::after{content:"\2713";color:#fff;font-size:.8rem;font-weight:700}
+.msg{min-height:1.5em;margin-top:12px;font-weight:700;color:var(--moss);font-size:.9rem}
+.pop{animation:pop .5s}
+@keyframes pop{50%{transform:scale(1.2)}}
+.sim{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;background:var(--paper);border-radius:28px;padding:48px;align-items:center}
+.ctl{margin-top:22px}
+.ctl label{display:flex;justify-content:space-between;font-weight:700;font-size:.95rem;margin-bottom:4px}
+.ctl output{color:var(--moss)}
+input[type=range]{width:100%;accent-color:var(--moss);height:28px}
+.out{background:var(--mist);border-radius:22px;padding:32px;text-align:center}
+.out .big{font-family:var(--serif);font-size:5rem;line-height:1}
+.out > span{font-size:.9rem;color:var(--soft)}
+.out p{margin:16px auto 0;min-height:3.4em;font-size:.95rem}
+.badge{display:inline-block;margin-top:14px;background:var(--amber);color:var(--ink);font-weight:700;padding:8px 18px;border-radius:999px}
+.badge[hidden]{display:none}
+/* progression */
+.prog{background:var(--ink);color:#fff;border-radius:28px;padding:48px}
+.phead{display:flex;justify-content:space-between;gap:32px;align-items:flex-start;flex-wrap:wrap;margin-bottom:36px}
+.phead p{color:#B9CCC4}
+.pstats{display:flex;gap:32px}
+.pstats div{text-align:center}
+.pstats b{display:block;font-family:var(--serif);font-size:2.6rem;line-height:1}
+.pstats span{font-size:.85rem;color:#B9CCC4}
+.ladder{list-style:none;display:flex;position:relative;margin-bottom:28px}
+.ladder::before{content:"";position:absolute;left:8%;right:8%;top:22px;height:3px;background:#2B4A40}
+.ladder li{position:relative;flex:1;text-align:center;font-size:.85rem;color:#8FA89E}
+.ladder i{display:grid;place-items:center;width:46px;height:46px;margin:0 auto 8px;border-radius:50%;background:#1B382F;border:3px solid #2B4A40;font-style:normal;font-weight:700;font-family:var(--serif);font-size:1.2rem;position:relative;z-index:1;transition:.3s}
+.ladder span{display:block;font-weight:700}
+.ladder small{display:block;font-size:.75rem}
+.ladder li.done,.ladder li.cur{color:#fff}
+.ladder li.done i{background:var(--moss);border-color:var(--moss)}
+.ladder li.cur i{background:var(--amber);border-color:var(--amber);color:var(--ink);transform:scale(1.15)}
+.prog .bar{background:#1B382F;height:10px;margin:0 0 10px}
+.prog .bar i{background:var(--amber)}
+#pnext{color:#B9CCC4;margin-bottom:32px;font-size:.95rem}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bdg{border:2px dashed #2B4A40;border-radius:16px;padding:16px 18px;color:#8FA89E;transition:.3s}
+.bdg b{display:block;color:inherit}
+.bdg span{font-size:.85rem}
+.bdg.on{border:2px solid var(--amber);background:rgba(232,150,46,.14);color:#fff}
+.bdg.on b::before{content:"\2713  ";color:var(--amber)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,40px);background:var(--ink);color:#fff;padding:14px 24px;border:2px solid var(--amber);border-radius:999px;font-weight:700;font-size:.95rem;opacity:0;pointer-events:none;transition:.3s;z-index:20;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:860px){.prog{padding:28px}.badges{grid-template-columns:1fr 1fr}.ladder small{display:none}.ladder span{font-size:.62rem}.ladder i{width:36px;height:36px;font-size:1rem}.ladder::before{top:18px}}
+@media (prefers-reduced-motion:reduce){.toast,.ladder i,.bdg{transition:none}}
+@media (max-width:860px){.sim{grid-template-columns:1fr;padding:28px}.ringrow{gap:14px}}
+@media (prefers-reduced-motion:reduce){.pop{animation:none}.arc,.bar i.live{transition:none}}
+@media (max-width:860px){
+  nav ul{display:none}
+  .hero,.compare,.pillars,.price{grid-template-columns:1fr}
+  .steps,.quotes{grid-template-columns:1fr}
+  .hero{gap:40px;padding-bottom:56px}
+  section{padding:60px 0}
+  .price{padding:32px}
+}
+@media (prefers-reduced-motion:reduce){.bar i{animation:none;width:var(--w)}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav aria-label="Main">
+    <a class="logo" href="#top" id="top">Primespan</a>
+    <ul>
+      <li><a href="#why">Why personal</a></li>
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#play">Try it</a></li>
+      <li><a href="#progress">Levels</a></li>
+      <li><a href="#science">The science</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero">
+    <div>
+      <h1>Your Oura data, turned into this morning’s plan.</h1>
+      <p class="lead">Primespan reads your sleep, HRV and recovery, then tells you exactly what to change today for sleep, food and training. Built around your body, not population averages.</p>
+      <div class="actions">
+        <a class="btn" href="#pricing">Start your 14-day trial</a>
+        <a class="btn ghost" href="#how">See how it works</a>
+      </div>
+      <small>Connects to Oura Ring and Apple Watch. Cancel any time.</small>
+    </div>
+
+    <aside class="plan" aria-label="Interactive morning plan">
+      <header><strong>Good morning, Natasha</strong><span id="streak">Day 12 streak</span></header>
+      <div class="ringrow">
+        <div class="ring"><svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="52"/><circle class="arc" id="arc" cx="60" cy="60" r="52"/></svg><b id="score">74</b></div>
+        <div class="lvl"><span id="lvltxt">Level 4: Optimiser</span><div class="bar"><i class="live" id="xpbar" style="width:20%"></i></div><small id="xptxt">340 / 500 XP</small></div>
+      </div>
+      <p class="hint">Predicted readiness tomorrow. Tap each action as you finish it to raise it.</p>
+      <div class="tasks">
+        <button class="task" data-xp="40" data-pts="4" aria-pressed="false"><span class="chk"></span><span><strong>Train: zone 2 for 40 minutes</strong><small>HRV is below baseline, so we swapped intervals.</small></span><em>+40 XP</em></button>
+        <button class="task" data-xp="30" data-pts="3" aria-pressed="false"><span class="chk"></span><span><strong>Eat protein within an hour of waking</strong><small>Your low-recovery mornings followed light breakfasts.</small></span><em>+30 XP</em></button>
+        <button class="task" data-xp="40" data-pts="4" aria-pressed="false"><span class="chk"></span><span><strong>Lights out by 10:15 pm</strong><small>Your deep sleep rises when lights are out by 10:30.</small></span><em>+40 XP</em></button>
+      </div>
+      <p class="msg" id="msg" aria-live="polite"></p>
+    </aside>
+  </header>
+</div>
+
+<section class="white" id="why">
+  <div class="wrap">
+    <div class="intro">
+      <h2>You already track everything. Nothing tells you what to do with it.</h2>
+      <p>Most wellness apps hand you the same tips whatever your numbers say. Primespan starts with your data and explains every recommendation.</p>
+    </div>
+    <div class="compare">
+      <div class="col generic">
+        <h3>A generic wellness app</h3>
+        <ul>
+          <li>“Sleep 8 hours” for everyone</li>
+          <li>Advice you could find with a quick search</li>
+          <li>Your wearable data sits in a separate app</li>
+          <li>Conflicting studies left for you to untangle</li>
+        </ul>
+      </div>
+      <div class="col mine">
+        <h3>Primespan</h3>
+        <ul>
+          <li>Targets set from your own baselines</li>
+          <li>One short daily plan, never a feed of tips</li>
+          <li>Oura, Apple Watch and food logs in one place</li>
+          <li>Studies reviewed and summarised for your profile</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="intro">
+      <h2>From ring to plan in three steps</h2>
+      <p>Two minutes to set up. After that, your plan is ready when you wake.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><h3>Connect your wearable</h3><p>Link your Oura Ring or Apple Watch. Primespan studies two weeks of your data to learn what normal looks like for you.</p></div>
+      <div class="step"><h3>Get your morning plan</h3><p>Each day you see three actions for sleep, nutrition and training, ranked by how much they matter for your recovery.</p></div>
+      <div class="step"><h3>Watch your trends move</h3><p>See which changes improved your sleep, HRV and resting heart rate, and keep the ones that work.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="play" style="padding-top:0">
+  <div class="wrap">
+    <div class="sim">
+      <div>
+        <h2>Can you hit a 90?</h2>
+        <p style="color:var(--soft)">Tune tomorrow’s evening and watch your predicted readiness move. Reach 90 to unlock a Peak Day.</p>
+        <div class="ctl"><label for="bed">Bedtime <output id="bedo"></output></label><input type="range" id="bed" min="0" max="8" value="4"></div>
+        <div class="ctl"><label for="caf">Last coffee <output id="cafo"></output></label><input type="range" id="caf" min="10" max="18" value="16"></div>
+        <div class="ctl"><label for="wk">Evening workout <output id="wko"></output></label><input type="range" id="wk" min="0" max="2" value="1"></div>
+        <div class="ctl"><label for="scr">Screens off before bed <output id="scro"></output></label><input type="range" id="scr" min="0" max="90" step="15" value="30"></div>
+      </div>
+      <div class="out" aria-live="polite">
+        <div class="big" id="psim">76</div>
+        <span>Predicted readiness</span>
+        <div class="bar"><i class="live" id="simbar" style="width:76%"></i></div>
+        <p id="tip"></p>
+        <div class="badge" id="badge" hidden>Peak Day unlocked</div>
+      </div>
+    </div>
+    <p class="note">Illustrative model for a course project, not medical advice.</p>
+  </div>
+</section>
+
+<section id="progress" style="padding-top:0">
+  <div class="wrap">
+    <div class="prog">
+      <div class="phead">
+        <div>
+          <h2>Level up your healthspan</h2>
+          <p>Every action and every Peak Day adds XP. Your level, streak and badges update as you play above.</p>
+        </div>
+        <div class="pstats">
+          <div><b id="pxp">340</b><span>total XP</span></div>
+          <div><b id="pstreak">12</b><span>day streak</span></div>
+        </div>
+      </div>
+      <ol class="ladder" aria-label="Level ladder">
+        <li data-l="1"><i>1</i><span>Baseline</span><small>0 XP</small></li>
+        <li data-l="2"><i>2</i><span>Routine</span><small>100 XP</small></li>
+        <li data-l="3"><i>3</i><span>Rhythm</span><small>200 XP</small></li>
+        <li data-l="4"><i>4</i><span>Optimiser</span><small>300 XP</small></li>
+        <li data-l="5"><i>5</i><span>Longevity Regular</span><small>500 XP</small></li>
+        <li data-l="6"><i>6</i><span>Healthspan Lead</span><small>750 XP</small></li>
+      </ol>
+      <div class="bar"><i class="live" id="pbar" style="width:20%"></i></div>
+      <p id="pnext"></p>
+      <div class="badges">
+        <div class="bdg" data-b="first"><b>First step</b><span>Complete any daily action</span></div>
+        <div class="bdg" data-b="full"><b>Full day</b><span>Complete all three actions. +50 XP</span></div>
+        <div class="bdg" data-b="peak"><b>Peak Day</b><span>Hit a 90 in the simulator. +60 XP</span></div>
+        <div class="bdg" data-b="early"><b>Early bedtime</b><span>Set lights out by 10:00 pm. +20 XP</span></div>
+        <div class="bdg" data-b="noon"><b>Noon cutoff</b><span>Last coffee by 12:00 pm. +20 XP</span></div>
+        <div class="bdg" data-b="l5"><b>Longevity Regular</b><span>Reach Level 5</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="white" id="science">
+  <div class="wrap">
+    <div class="intro">
+      <h2>Built for the long game, not the next trend</h2>
+      <p>Longevity is a decades-long project. Primespan is designed to help you stay energetic and sharp well into your 50s and 60s.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar"><h3>Longevity optimisation</h3><p>Track the markers linked to healthspan, such as sleep regularity, resting heart rate and cardio fitness, and see them improve over months.</p></div>
+      <div class="pillar"><h3>Early warning signals</h3><p>Get a gentle nudge when your resting heart rate or temperature drifts from your baseline, so you can rest or talk to your doctor sooner.</p></div>
+      <div class="pillar"><h3>Performance you can feel</h3><p>Time your hardest workouts and biggest meetings for when your body is ready, and protect your focus when it is not.</p></div>
+      <div class="pillar"><h3>Evidence you can check</h3><p>Every recommendation links to the research behind it, summarised in plain language. You stay in charge of what you act on.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="voices">
+  <div class="wrap">
+    <div class="intro"><h2>What early members say</h2></div>
+    <div class="quotes">
+      <blockquote>“It finally explained why my deep sleep drops on Sunday nights. I changed one habit and it came back.”<cite>Early member, Singapore</cite></blockquote>
+      <blockquote>“One plan each morning, with the reasoning. I stopped second-guessing my training.”<cite>Early member, Singapore</cite></blockquote>
+      <blockquote>“I used to open four apps before breakfast. Now I open one.”<cite>Early member, Singapore</cite></blockquote>
+    </div>
+    <p class="note">Sample testimonials for a course project.</p>
+  </div>
+</section>
+
+<section id="pricing" style="padding-top:0">
+  <div class="wrap">
+    <div class="price">
+      <div>
+        <h2 style="color:#fff">One plan. Everything included.</h2>
+        <div class="amt">US$29<small> / month</small></div>
+        <a class="btn" href="#top">Start your 14-day trial</a>
+      </div>
+      <ul>
+        <li>Daily personalised plan for sleep, food and training</li>
+        <li>Oura Ring and Apple Watch sync</li>
+        <li>Monthly healthspan report</li>
+        <li>Research summaries matched to your profile</li>
+        <li>Cancel any time</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Primespan is a wellness tool and not a medical device. It does not diagnose, treat or prevent any condition. Speak to a doctor about health concerns. Oura and Apple Watch are trademarks of their respective owners and are named only to describe compatibility.</p>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+<script>
+(function(){
+var $=function(id){return document.getElementById(id)};
+var T=[0,100,200,300,500,750],N=['Baseline','Routine','Rhythm','Optimiser','Longevity Regular','Healthspan Lead'];
+var S={peak:false,early:false,noon:false,lvl:0,ready:false,on:{}};
+var tasks=[].slice.call(document.querySelectorAll('.task'));
+var tt;
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},3200)}
+function render(){
+  var d=tasks.filter(function(t){return t.getAttribute('aria-pressed')==='true'});
+  var all=d.length===tasks.length;
+  var xp=340+d.reduce(function(a,t){return a+ +t.dataset.xp},0)+(all?50:0)+(S.peak?60:0)+(S.early?20:0)+(S.noon?20:0);
+  var sc=74+d.reduce(function(a,t){return a+ +t.dataset.pts},0);
+  var lvl=0;T.forEach(function(v,i){if(xp>=v)lvl=i+1});
+  var nxt=lvl<6?T[lvl]:null;
+  var pct=nxt?(xp-T[lvl-1])/(nxt-T[lvl-1])*100:100;
+  var streak=12+(all?1:0);
+  $('score').textContent=sc;
+  $('arc').style.strokeDashoffset=327*(1-sc/100);
+  $('lvltxt').textContent='Level '+lvl+': '+N[lvl-1];
+  $('xptxt').textContent=nxt?xp+' / '+nxt+' XP':xp+' XP, top level';
+  $('xpbar').style.width=pct+'%';
+  $('streak').textContent='Day '+streak+' streak';
+  $('msg').textContent=all?'Day complete. Streak extended and +50 bonus XP.':(d.length?d.length+' of 3 done. Keep going.':'');
+  $('pxp').textContent=xp;
+  $('pstreak').textContent=streak;
+  $('pbar').style.width=pct+'%';
+  $('pnext').textContent=nxt?(nxt-xp)+' XP to Level '+(lvl+1)+': '+N[lvl]:'You have reached the top level.';
+  [].forEach.call(document.querySelectorAll('.ladder li'),function(li){
+    var l=+li.dataset.l;li.className=l<lvl?'done':(l===lvl?'cur':'');
+  });
+  var f={first:d.length>0,full:all,peak:S.peak,early:S.early,noon:S.noon,l5:lvl>=5};
+  var newB=null;
+  [].forEach.call(document.querySelectorAll('.bdg'),function(b){
+    var k=b.dataset.b;b.classList.toggle('on',f[k]);
+    if(f[k]&&!S.on[k])newB=b.querySelector('b').textContent;
+    S.on[k]=f[k];
+  });
+  if(S.ready&&newB)toast('Badge earned: '+newB);
+  if(S.ready&&lvl>S.lvl)toast('Level up! You are now Level '+lvl+': '+N[lvl-1]);
+  S.lvl=lvl;
+  return all;
+}
+tasks.forEach(function(t){
+  t.addEventListener('click',function(){
+    t.setAttribute('aria-pressed',t.getAttribute('aria-pressed')!=='true');
+    if(render()){var s=$('streak');s.classList.remove('pop');void s.offsetWidth;s.classList.add('pop');s.style.display='inline-block'}
+  });
+});
+
+function fmt(m){var h=Math.floor(m/60)%24,mm=m%60;return((h+11)%12+1)+':'+(mm<10?'0':'')+mm+' '+(h>=12?'pm':'am')}
+var tips={
+  bed:'Biggest drag: a late bedtime. Try lights out by 10:00 pm.',
+  caf:'Biggest drag: late caffeine. Try your last coffee by noon.',
+  wk:'Biggest drag: your workout timing. Try light movement in the evening.',
+  scr:'Biggest drag: screens right up to bed. Try an hour screen-free.'
+};
+function sim(){
+  var bed=+$('bed').value,caf=+$('caf').value,wk=+$('wk').value,scr=+$('scr').value;
+  var pen={bed:Math.abs(bed-1)*3.5,caf:Math.max(0,caf-12)*1.5,wk:[2,0,5][wk],scr:(60-Math.min(scr,60))/60*8};
+  var sum=pen.bed+pen.caf+pen.wk+pen.scr;
+  var score=Math.round(Math.max(40,Math.min(99,96-sum)));
+  $('bedo').textContent=fmt(21*60+30+bed*30);
+  $('cafo').textContent=fmt(caf*60);
+  $('wko').textContent=['None','Light','Hard'][wk];
+  $('scro').textContent=scr+' min';
+  $('psim').textContent=score;
+  $('simbar').style.width=score+'%';
+  var worst='bed';for(var k in pen){if(pen[k]>pen[worst])worst=k}
+  var peak=score>=90;
+  $('tip').textContent=peak?'Peak Day. This is the pattern Primespan would build your week around.':tips[worst];
+  $('badge').hidden=!peak;
+  if(peak)S.peak=true;
+  if(bed<=1)S.early=true;
+  if(caf<=12)S.noon=true;
+  render();
+}
+['bed','caf','wk','scr'].forEach(function(id){$(id).addEventListener('input',sim)});
+sim();
+S.ready=true;
+})();
+</script>
+
+</body>
+</html>
